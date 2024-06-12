@@ -1,0 +1,68 @@
+from collections import deque
+
+def is_valid_state(state, max_jug1, max_jug2):
+    jug1, jug2 = state
+    return 0 <= jug1 <= max_jug1 and 0 <= jug2 <= max_jug2
+
+def get_successors(state, max_jug1, max_jug2):
+    jug1, jug2 = state
+    successors = []
+
+    # Fill jug1
+    successors.append((max_jug1, jug2))
+
+    # Fill jug2
+    successors.append((jug1, max_jug2))
+
+    # Empty jug1
+    successors.append((0, jug2))
+
+    # Empty jug2
+    successors.append((jug1, 0))
+
+    # Pour jug1 into jug2
+    pour_into_jug2 = min(jug1, max_jug2 - jug2)
+    successors.append((jug1 - pour_into_jug2, jug2 + pour_into_jug2))
+
+    # Pour jug2 into jug1
+    pour_into_jug1 = min(jug2, max_jug1 - jug1)
+    successors.append((jug1 + pour_into_jug1, jug2 - pour_into_jug1))
+
+    return [s for s in successors if is_valid_state(s, max_jug1, max_jug2)]
+
+def bfs_solve(jug1_capacity, jug2_capacity, target):
+    start_state = (0, 0)
+    queue = deque([(start_state, [])])
+    visited = set()
+
+    while queue:
+        (jug1, jug2), path = queue.popleft()
+        if (jug1, jug2) in visited:
+            continue
+        visited.add((jug1, jug2))
+
+        path = path + [(jug1, jug2)]
+
+        if jug1 == target or jug2 == target:
+            return path
+
+        for successor in get_successors((jug1, jug2), jug1_capacity, jug2_capacity):
+            if successor not in visited:
+                queue.append((successor, path))
+
+    return None
+
+def print_solution(solution):
+    if solution is None:
+        print("No solution found.")
+    else:
+        for step in solution:
+            print(step)
+
+# Example usage:
+jug1_capacity = 4
+jug2_capacity = 3
+target = 2
+
+solution = bfs_solve(jug1_capacity, jug2_capacity, target)
+print_solution(solution)
