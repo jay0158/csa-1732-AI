@@ -1,0 +1,59 @@
+from collections import deque
+
+# Define the directions in which the vacuum cleaner can move
+directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+
+def is_valid_position(x, y, grid):
+    return 0 <= x < len(grid) and 0 <= y < len(grid[0])
+
+def get_successors(position, grid):
+    x, y = position
+    successors = []
+    for dx, dy in directions:
+        new_x, new_y = x + dx, y + dy
+        if is_valid_position(new_x, new_y, grid):
+            successors.append((new_x, new_y))
+    return successors
+
+def bfs_clean(grid, start):
+    queue = deque([(start, [])])
+    visited = set()
+    
+    while queue:
+        (x, y), path = queue.popleft()
+        if (x, y) in visited:
+            continue
+        visited.add((x, y))
+        path = path + [(x, y)]
+        
+        # Clean the current position
+        grid[x][y] = 0
+        
+        # Check if all squares are clean
+        if all(cell == 0 for row in grid for cell in row):
+            return path
+        
+        for successor in get_successors((x, y), grid):
+            if successor not in visited:
+                queue.append((successor, path))
+    
+    return None
+
+def print_solution(solution):
+    if solution is None:
+        print("No solution found.")
+    else:
+        for step in solution:
+            print(step)
+
+# Example usage:
+grid = [
+    [1, 1, 0],
+    [0, 1, 1],
+    [1, 0, 1]
+]
+
+start_position = (0, 0)
+
+solution = bfs_clean(grid, start_position)
+print_solution(solution)
