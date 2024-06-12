@@ -1,0 +1,31 @@
+def dfs_recursive(graph, start_node, visited=None):
+    if visited is None:
+        visited = set()
+    
+    # Mark the current node as visited
+    visited.add(start_node)
+    
+    # Process the current node (for this example, we print it)
+    print(start_node, end=' ')
+    
+    # Recur for all the vertices adjacent to this vertex
+    for neighbor in graph[start_node]:
+        if neighbor not in visited:
+            dfs_recursive(graph, neighbor, visited)
+
+# Example usage:
+graph = {
+    'A': ['B', 'C'],
+    'B': ['A', 'D', 'E'],
+    'C': ['A', 'F', 'G'],
+    'D': ['B'],
+    'E': ['B', 'H'],
+    'F': ['C'],
+    'G': ['C'],
+    'H': ['E']
+}
+
+start_node = 'A'
+print("DFS Recursive Traversal Order:", end=' ')
+dfs_recursive(graph, start_node)
+print()  # For a new line after the traversal
