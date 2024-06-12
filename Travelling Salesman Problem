@@ -1,0 +1,38 @@
+from itertools import permutations
+
+def calculate_total_distance(permutation, distance_matrix):
+    total_distance = 0
+    number_of_cities = len(permutation)
+    for i in range(number_of_cities):
+        total_distance += distance_matrix[permutation[i]][permutation[(i + 1) % number_of_cities]]
+    return total_distance
+
+def tsp_brute_force(distance_matrix):
+    # Generate all possible permutations of cities
+    cities = list(range(len(distance_matrix)))
+    all_permutations = permutations(cities)
+    
+    # Initialize the minimum distance to a large number
+    min_distance = float('inf')
+    best_route = None
+    
+    # Iterate through all permutations to find the minimum distance
+    for perm in all_permutations:
+        current_distance = calculate_total_distance(perm, distance_matrix)
+        if current_distance < min_distance:
+            min_distance = current_distance
+            best_route = perm
+            
+    return best_route, min_distance
+
+# Example usage:
+distance_matrix = [
+    [0, 10, 15, 20],
+    [10, 0, 35, 25],
+    [15, 35, 0, 30],
+    [20, 25, 30, 0]
+]
+
+best_route, min_distance = tsp_brute_force(distance_matrix)
+print("Best route:", best_route)
+print("Minimum distance:", min_distance)
