@@ -1,0 +1,42 @@
+% Facts
+student(john).
+student(mary).
+student(alice).
+
+teacher(mr_smith).
+teacher(ms_jones).
+teacher(dr_brown).
+
+subject_code(math101).
+subject_code(cs102).
+subject_code(phy103).
+
+% Relationships
+studies(john, math101).
+studies(mary, cs102).
+studies(alice, phy103).
+
+teaches(mr_smith, math101).
+teaches(ms_jones, cs102).
+teaches(dr_brown, phy103).
+
+% Rules
+student_of_teacher(Student, Teacher) :-
+    studies(Student, Subject),
+    teaches(Teacher, Subject).
+
+subject_of_teacher(Teacher, Subject) :-
+    teaches(Teacher, Subject).
+
+subject_of_student(Student, Subject) :-
+    studies(Student, Subject).
+
+% Queries
+% Find all students of a specific teacher
+% ?- student_of_teacher(Student, ms_jones).
+
+% Find the subject taught by a specific teacher
+% ?- subject_of_teacher(mr_smith, Subject).
+
+% Find the subject studied by a specific student
+% ?- subject_of_student(john, Subject).
