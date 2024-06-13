@@ -1,0 +1,40 @@
+% Bird facts
+bird(sparrow).
+bird(penguin).
+bird(ostrich).
+bird(eagle).
+bird(kiwi).
+
+% Birds that cannot fly
+cannot_fly(penguin).
+cannot_fly(ostrich).
+cannot_fly(kiwi).
+
+% Rule to determine if a bird can fly
+can_fly(Bird) :-
+    bird(Bird),
+    \+ cannot_fly(Bird).
+
+% Queries
+
+% List all birds
+list_birds :-
+    bird(Bird),
+    write(Bird), nl,
+    fail.
+list_birds.
+
+% Check if a particular bird can fly
+check_can_fly(Bird) :-
+    (can_fly(Bird) ->
+        write(Bird), write(' can fly.');
+        write(Bird), write(' cannot fly.')),
+    nl.
+
+% List all birds that can fly
+list_flying_birds :-
+    can_fly(Bird),
+    write(Bird), write(' can fly.'), nl,
+    fail.
+list_flying_birds.
+
