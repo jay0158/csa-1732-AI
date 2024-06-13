@@ -1,0 +1,42 @@
+% Graph represented as edge(source, destination, cost).
+edge(a, b, 2).
+edge(a, c, 5).
+edge(b, d, 1).
+edge(c, e, 3).
+edge(d, f, 4).
+edge(e, f, 1).
+
+% Heuristic function (h value) for each node.
+heuristic(a, 5).
+heuristic(b, 4).
+heuristic(c, 2).
+heuristic(d, 4).
+heuristic(e, 1).
+heuristic(f, 0).
+
+% Best First Search algorithm
+best_first_search(Start, Goal, Path) :-
+    best_first_search_path([[Start, [Start], 0]], Goal, Path).
+
+best_first_search_path([[Node, PathSoFar, Cost]|_], Node, Path) :-
+    reverse(PathSoFar, Path).
+best_first_search_path([[Node, PathSoFar, Cost]|RestQueue], Goal, Path) :-
+    findall([Next, [Next|PathSoFar], NewCost],
+            (edge(Node, Next, StepCost),
+             \+ member(Next, PathSoFar),
+             NewCost is Cost + StepCost,
+             heuristic(Next, HValue),
+             FValue is NewCost + HValue),
+            NextNodes),
+    append(NextNodes, RestQueue, NewQueue),
+    sort_queue(NewQueue, SortedQueue),
+    best_first_search_path(SortedQueue, Goal, Path).
+
+sort_queue(Queue, Sorted) :-
+    predsort(compare_paths, Queue, Sorted).
+
+compare_paths(<, [_, _, Cost1], [_, _, Cost2]) :- Cost1 < Cost2.
+compare_paths(>, [_, _, Cost1], [_, _, Cost2]) :- Cost1 >= Cost2.
+
+% Query
+% Example query: best_first_search(a, f, Path).
