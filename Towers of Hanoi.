@@ -1,0 +1,20 @@
+% move(N, Source, Destination, Auxiliary)
+% This predicate will print the steps required to move N disks from Source to Destination using Auxiliary as an intermediate.
+
+move(1, Source, Destination, _) :-
+    write('Move disk from '), write(Source), write(' to '), write(Destination), nl.
+move(N, Source, Destination, Auxiliary) :-
+    N > 1,
+    M is N - 1,
+    move(M, Source, Auxiliary, Destination),
+    move(1, Source, Destination, _),
+    move(M, Auxiliary, Destination, Source).
+
+% solve_hanoi(N)
+% This predicate initiates the process to solve the Towers of Hanoi with N disks.
+
+solve_hanoi(N) :-
+    move(N, left, right, center).
+
+% Example query to solve for 3 disks:
+% ?- solve_hanoi(3).
