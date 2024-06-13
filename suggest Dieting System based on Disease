@@ -1,0 +1,44 @@
+% Facts: disease and dietary recommendations
+
+% Disease: diabetes
+disease(diabetes).
+diet_recommendation(diabetes, 'Low sugar diet, high fiber, whole grains, fruits, vegetables, lean protein.').
+
+% Disease: hypertension
+disease(hypertension).
+diet_recommendation(hypertension, 'Low sodium diet, rich in fruits, vegetables, whole grains, low-fat dairy, lean protein.').
+
+% Disease: celiac
+disease(celiac).
+diet_recommendation(celiac, 'Gluten-free diet, avoid wheat, barley, rye, consume gluten-free grains like rice, corn, quinoa.').
+
+% Disease: heart disease
+disease(heart_disease).
+diet_recommendation(heart_disease, 'Low saturated fat diet, rich in fruits, vegetables, whole grains, lean protein, healthy fats.').
+
+% Disease: kidney disease
+disease(kidney_disease).
+diet_recommendation(kidney_disease, 'Low protein diet, low phosphorus, low potassium, controlled sodium, avoid processed foods.').
+
+% Rule: suggest diet based on disease
+suggest_diet(Disease) :-
+    disease(Disease),
+    diet_recommendation(Disease, Recommendation),
+    write('Diet recommendation for '), write(Disease), write(': '), nl,
+    write(Recommendation), nl.
+
+% Queries
+
+% List all diseases
+list_diseases :-
+    disease(Disease),
+    write(Disease), nl,
+    fail.
+list_diseases.
+
+% Get diet recommendation for a specific disease
+get_diet_recommendation(Disease) :-
+    (disease(Disease) ->
+        suggest_diet(Disease);
+        write('No dietary recommendations available for '), write(Disease), write('.')),
+    nl.
