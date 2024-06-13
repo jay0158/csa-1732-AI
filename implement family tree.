@@ -1,0 +1,57 @@
+% Facts: parent(child, parent).
+parent(john, mary).
+parent(john, david).
+parent(susan, mary).
+parent(susan, david).
+parent(mary, linda).
+parent(mary, james).
+parent(peter, linda).
+parent(peter, james).
+parent(david, karen).
+parent(david, tom).
+parent(lucy, karen).
+parent(lucy, tom).
+
+% Rules
+
+% Child relationship
+child(X, Y) :- parent(Y, X).
+
+% Sibling relationship
+sibling(X, Y) :- parent(Z, X), parent(Z, Y), X \= Y.
+
+% Grandparent relationship
+grandparent(X, Y) :- parent(X, Z), parent(Z, Y).
+
+% Grandchild relationship
+grandchild(X, Y) :- grandparent(Y, X).
+
+% Queries
+
+% List all children of a given parent
+list_children(Parent) :-
+    parent(Child, Parent),
+    write(Child), nl,
+    fail.
+list_children(_).
+
+% List all siblings of a given person
+list_siblings(Person) :-
+    sibling(Person, Sibling),
+    write(Sibling), nl,
+    fail.
+list_siblings(_).
+
+% List all grandparents of a given person
+list_grandparents(Person) :-
+    grandparent(Grandparent, Person),
+    write(Grandparent), nl,
+    fail.
+list_grandparents(_).
+
+% List all grandchildren of a given person
+list_grandchildren(Person) :-
+    grandchild(Grandchild, Person),
+    write(Grandchild), nl,
+    fail.
+list_grandchildren(_).
