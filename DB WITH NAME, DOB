@@ -1,0 +1,12 @@
+% Define the database
+% Format: person(Name, DOB).
+
+person('Alice', '1990-01-01').
+person('Bob', '1985-05-23').
+person('Charlie', '1992-12-12').
+person('Diana', '1988-07-07').
+person('Eve', '1995-09-15').
+
+% Rule to find a person's DOB given their name
+find_dob(Name, DOB) :-
+    person(Name, DOB).
