@@ -1,0 +1,53 @@
+% Planets facts
+planet(mercury).
+planet(venus).
+planet(earth).
+planet(mars).
+planet(jupiter).
+planet(saturn).
+planet(uranus).
+planet(neptune).
+
+% Order from the Sun
+order_from_sun(mercury, 1).
+order_from_sun(venus, 2).
+order_from_sun(earth, 3).
+order_from_sun(mars, 4).
+order_from_sun(jupiter, 5).
+order_from_sun(saturn, 6).
+order_from_sun(uranus, 7).
+order_from_sun(neptune, 8).
+
+% Has rings
+has_rings(jupiter).
+has_rings(saturn).
+has_rings(uranus).
+has_rings(neptune).
+
+% Queries
+
+% List all planets
+list_planets :-
+    planet(X),
+    write(X), nl,
+    fail.
+list_planets.
+
+% Find the order of a specific planet from the Sun
+planet_order(Planet) :-
+    order_from_sun(Planet, Order),
+    write(Planet), write(' is the '), write(Order), write(' planet from the Sun.'), nl.
+
+% Find planets with rings
+planets_with_rings :-
+    has_rings(Planet),
+    write(Planet), write(' has rings.'), nl,
+    fail.
+planets_with_rings.
+
+% Check if a planet has rings
+check_rings(Planet) :-
+    (has_rings(Planet) ->
+        write(Planet), write(' has rings.');
+        write(Planet), write(' does not have rings.')),
+    nl.
