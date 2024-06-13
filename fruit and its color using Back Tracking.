@@ -1,0 +1,19 @@
+% Facts: fruit and its color
+fruit(apple, red).
+fruit(banana, yellow).
+fruit(grape, purple).
+fruit(orange, orange).
+fruit(watermelon, green).
+
+% Rule: find fruit by color
+find_fruit(Color, Fruit) :-
+    fruit(Fruit, Color).
+
+% Query to find fruits by color
+/*
+Example Query:
+?- find_fruit(red, Fruit).
+Output:
+Fruit = apple ;
+false.
+*/
