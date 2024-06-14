@@ -1,0 +1,55 @@
+% Rules
+% Rule: If a person is a parent of someone, they are ancestors of that person
+ancestor(X, Y) :- parent(X, Y).
+ancestor(X, Y) :- parent(X, Z), ancestor(Z, Y).
+
+% Facts
+parent(john, mary).
+parent(john, michael).
+parent(susan, mary).
+parent(susan, michael).
+parent(mary, sophia).
+parent(mary, james).
+parent(robert, sophia).
+parent(robert, james).
+parent(michael, kevin).
+parent(michael, lisa).
+parent(linda, kevin).
+parent(linda, lisa).
+
+% Forward chaining algorithm
+forward_chaining :-
+    repeat,
+    (   new_fact,
+        fail
+    ;   !).
+
+% Check for new facts to assert
+new_fact :-
+    rule(Head, Body),
+    \+ Head,
+    all_true(Body),
+    assertz(Head),
+    write('New fact: '), write(Head), nl.
+
+% Utility predicate to check all elements in a list are true (already known)
+all_true([]).
+all_true([H|T]) :-
+    call(H),
+    all_true(T).
+
+% Example queries:
+% 1. Run forward chaining to assert all possible ancestors:
+% ?- forward_chaining.
+%
+% 2. Query to find all ancestors of Mary:
+% ?- ancestor(X, mary).
+%
+% 3. Query to find all ancestors of Sophia:
+% ?- ancestor(X, sophia).
+%
+% 4. Query to find all ancestors of Kevin:
+% ?- ancestor(X, kevin).
+%
+% 5. Query to find all ancestors of Robert:
+% ?- ancestor(X, robert).
