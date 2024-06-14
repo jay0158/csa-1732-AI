@@ -1,0 +1,40 @@
+% Rules
+% Rule: X is happy if X is rich or X is healthy
+happy(X) :- rich(X).
+happy(X) :- healthy(X).
+
+% Facts
+rich(john).
+healthy(mary).
+
+% Backward chaining algorithm
+backward_chaining(Goal) :-
+    prove(Goal, []).
+
+% Base case: Goal is already a known fact
+prove(Goal, _) :-
+    call(Goal),
+    write('Goal '), write(Goal), write(' is true.'), nl.
+
+% Recursive case: Goal can be proved by a rule
+prove(Goal, Visited) :-
+    rule(Goal, Premises),
+    not(member(Goal, Visited)), % Prevent cycles
+    prove_list(Premises, [Goal|Visited]).
+
+% Check if all premises in the list can be proved
+prove_list([], _).
+prove_list([P|Ps], Visited) :-
+    prove(P, Visited),
+    prove_list(Ps, Visited).
+
+% Example queries:
+
+% 1. Query: Is John happy?
+% ?- backward_chaining(happy(john)).
+
+% 2. Query: Is Mary happy?
+% ?- backward_chaining(happy(mary)).
+
+% 3. Query: Is anyone happy?
+% ?- backward_chaining(happy(X)).
