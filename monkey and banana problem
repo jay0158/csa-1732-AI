@@ -1,0 +1,38 @@
+% Initial state
+state(at_door, at_window, on_floor, has_not).
+
+% Move action
+move(state(Monkey, Box, on_floor, Has),
+     move(Monkey, Destination),
+     state(Destination, Box, on_floor, Has)).
+
+% Push action
+move(state(Monkey, Monkey, on_floor, Has),
+     push(Monkey, Destination),
+     state(Destination, Destination, on_floor, Has)).
+
+% Climb action
+move(state(Monkey, Box, on_floor, Has),
+     climb,
+     state(Monkey, Box, on_box, Has)).
+
+% Climb down action
+move(state(Monkey, Box, on_box, Has),
+     climb_down,
+     state(Monkey, Box, on_floor, Has)).
+
+% Grasp action
+move(state(middle, middle, on_box, has_not),
+     grasp,
+     state(middle, middle, on_box, has)).
+
+% Plan to get the banana
+can_get(state(_, _, _, has)).
+
+can_get(State1) :-
+    move(State1, Move, State2),
+    can_get(State2),
+    write(State1), write(' -> '), write(Move), write(' -> '), write(State2), nl.
+
+% Example query to solve the problem:
+% ?- can_get(state(at_door, at_window, on_floor, has_not)).
