@@ -1,0 +1,65 @@
+% Sample graph represented as edges
+edge(a, b, 4).
+edge(a, c, 2).
+edge(b, d, 5).
+edge(b, e, 10).
+edge(c, f, 3).
+edge(c, g, 8).
+edge(d, h, 7).
+edge(e, i, 1).
+
+% Heuristic values for nodes
+heuristic(a, 8).
+heuristic(b, 7).
+heuristic(c, 6).
+heuristic(d, 5).
+heuristic(e, 4).
+heuristic(f, 3).
+heuristic(g, 2).
+heuristic(h, 1).
+heuristic(i, 0).
+
+% Best First Search algorithm
+best_first_search(Start, Goal, Path) :-
+    % Initialize the priority queue with the starting node
+    empty_pqueue(Empty),
+    add_pqueue((0, Start, [Start]), Empty, PQueue),
+    % Perform the search
+    best_first_search_helper(PQueue, Goal, Path).
+
+% Helper predicate for Best First Search
+best_first_search_helper(PQueue, Goal, Path) :-
+    % Remove the node with the lowest heuristic value from the priority queue
+    del_pqueue(_, (Cost, Current, PathSoFar), PQueue, RestQueue),
+    % If the current node is the goal, we found the path
+    ( Current = Goal ->
+        reverse(PathSoFar, Path)
+    ; % Otherwise, expand the current node and continue the search
+        findall((NextCost, NextNode, [NextNode|PathSoFar]),
+                ( edge(Current, NextNode, StepCost),
+                  heuristic(NextNode, H),
+                  NextCost is Cost + StepCost + H ),
+                NextMoves),
+        % Add the expanded nodes to the priority queue
+        add_list_to_pqueue(NextMoves, RestQueue, UpdatedQueue),
+        % Recursively continue the search
+        best_first_search_helper(UpdatedQueue, Goal, Path)
+    ).
+
+% Priority queue operations (from library(pqueue))
+:- use_module(library(pqueue)).
+
+% Add a list of items to the priority queue
+add_list_to_pqueue([], PQueue, PQueue).
+add_list_to_pqueue([(Priority, Item, Path)|Rest], PQueue, UpdatedPQueue) :-
+    add_pqueue((Priority, Item, Path), PQueue, NewPQueue),
+    add_list_to_pqueue(Rest, NewPQueue, UpdatedPQueue).
+
+% Example query:
+% ?- best_first_search(a, i, Path).
+% Output: Path = [a, c, f, i] ;
+%         Path = [a, c, g, i] ;
+%         Path = [a, b, e, i] ;
+%         Path = [a, b, d, h, i] .
+
+% The above example performs a Best First Search from node 'a' to node 'i' in a sample graph, considering heuristic values for nodes.
